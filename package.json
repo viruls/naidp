@@ -1,0 +1,39 @@
+{
+  "name": "naidp",
+  "version": "1.0.0",
+  "description": "Production-ready fullstack identity provider monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.7",
+    "prettier": "^3.0.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "packageManager": "npm@10.8.2",
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "identity-provider",
+    "saml2",
+    "oidc",
+    "oauth2",
+    "authentication",
+    "monorepo",
+    "turborepo"
+  ],
+  "author": "",
+  "license": "MIT"
+}
