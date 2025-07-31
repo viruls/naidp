@@ -14,7 +14,6 @@
     "migrate:prod": "NODE_ENV=production node dist/migrations/run.js"
   },
   "dependencies": {
-    "@naidp/domain": "workspace:*",
     "sqlite3": "^5.1.6",
     "pg": "^8.11.0",
     "knex": "^2.5.0"
