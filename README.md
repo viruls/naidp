@@ -2,6 +2,46 @@
 
 NAIDP is a comprehensive, production-ready identity provider built as a monorepo using Turborepo, featuring support for SAML2, OIDC, and OAuth2 protocols. It provides a complete solution for enterprise identity and access management with a focus on security, scalability, and maintainability.
 
+## ⚠️ Important: Node.js Version Requirement
+
+**This project requires Node.js 20.x LTS and will NOT work with Node.js 22.x or higher.**
+
+Node.js 22+ introduces breaking changes that cause npm workspace install errors such as:
+```
+npm error Unsupported URL Type "workspace:": workspace:*
+```
+
+### Required Node.js Version
+- **Required**: Node.js 20.x LTS (Latest LTS version recommended)
+- **Not supported**: Node.js 22.x or higher
+
+### Switching Node.js Versions
+
+If you're using nvm (Node Version Manager):
+
+```bash
+# Install and use Node.js 20 LTS
+nvm install 20
+nvm use 20
+
+# Verify you're using the correct version
+node --version  # Should show v20.x.x
+
+# Clean install after switching versions
+rm -rf node_modules package-lock.json
+npm install
+```
+
+If you're using GitHub Codespaces, the `.nvmrc` file in this repository will automatically configure the correct Node.js version.
+
+### Troubleshooting Install Issues
+
+If you encounter workspace protocol errors:
+1. Ensure you're using Node.js 20.x: `node --version`
+2. Clean your npm cache: `npm cache clean --force`
+3. Remove node_modules and package-lock.json: `rm -rf node_modules package-lock.json`
+4. Reinstall dependencies: `npm install`
+
 ## 🚀 Features
 
 ### Authentication Protocols
@@ -75,7 +115,7 @@ naidp/
 ## 🚦 Quick Start
 
 ### Prerequisites
-- Node.js 18+ and npm
+- **Node.js 20.x LTS** and npm (Node.js 22+ is NOT supported)
 - Docker and Docker Compose
 - PostgreSQL (for production)
 

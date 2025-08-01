@@ -23,7 +23,7 @@
   },
   "packageManager": "npm@10.8.2",
   "engines": {
-    "node": ">=18"
+    "node": ">=20.0.0 <21.0.0"
   },
   "keywords": [
     "identity-provider",
