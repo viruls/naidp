@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: naidp
+      POSTGRES_USER: naidp
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U naidp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-api:
+    build:
+      context: .
+      dockerfile: apps/user-api/Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://naidp:password@postgres:5432/naidp
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=production-jwt-secret-change-me
+      - SAML_ISSUER=https://naidp.example.com
+      - OIDC_ISSUER=https://naidp.example.com
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  admin-api:
+    build:
+      context: .
+      dockerfile: apps/admin-api/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://naidp:password@postgres:5432/naidp
+      - ADMIN_API_PORT=3001
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  admin-web:
+    build:
+      context: .
+      dockerfile: apps/admin-web/Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_ADMIN_API_URL=http://localhost:3001
+    depends_on:
+      - admin-api
+    restart: unless-stopped
+
+  user-web:
+    build:
+      context: .
+      dockerfile: apps/user-web/Dockerfile
+    ports:
+      - "3003:80"
+    environment:
+      - REACT_APP_USER_API_URL=http://localhost:3002
+    depends_on:
+      - user-api
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    name: naidp-network
